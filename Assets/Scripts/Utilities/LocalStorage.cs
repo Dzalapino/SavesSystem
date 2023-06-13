@@ -44,7 +44,7 @@ public class LocalStorage
 
     private string GetFullPath(string key)
     {
-        string fileName = key + ".json";
+        string fileName = key + ".json";    // Remember to change the file extension to match the actual serializer
         return Path.Combine(savesDirectory, fileName);
     }
 }

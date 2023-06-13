@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 
+// Model class for the PlayerData. Should be scallable and gather informations which should be stored
 [Serializable]
 public class PlayerData
 {
