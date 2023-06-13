@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -16,23 +17,25 @@ public class PlayerMovement : MonoBehaviour
     private Material[] highlightedMaterials; // Highlighted materials
 
     private bool isMouseButtonDown = false;
+    public bool isMovementEnabled = false;
 
-    private PlayerData playerData;
+    public PlayerData playerData;
 
     private void Awake()
     {
         controller = GetComponent<CharacterController>();
-        Cursor.lockState = CursorLockMode.Locked;
     }
 
     private void Start()
     {
-        playerData = SavesManager.Load("player_data");
-        Debug.Log(playerData.name);
+        playerData = new PlayerData("blank", 1, 0, 0, new List<Quest>());
     }
 
     private void Update()
     {
+        // Exit the method if movement is disabled
+        if (!isMovementEnabled) return;
+         
         // Get input for movement
         float moveHorizontal = Input.GetAxis("Horizontal");
         float moveVertical = Input.GetAxis("Vertical");
@@ -55,10 +58,13 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
+        // Exit the method if movement is disabled
+        if (!isMovementEnabled) return;
+
         // Rotate the character horizontally based on mouse input
         transform.Rotate(Vector3.up * mouseX * mouseSensitivity);
 
-        // Perform raycasting to detect collisions
+        // Perform raycast to detect collisions
         RaycastHit hit;
         if (Physics.Raycast(transform.position, transform.forward, out hit, raycastDistance))
         {
@@ -74,47 +80,39 @@ public class PlayerMovement : MonoBehaviour
                 // Store the current hit object
                 lastHitObject = hit.collider.gameObject;
 
-                // Check the tag of the hit object
+                // Check if raycast hitted any vendor
                 if (lastHitObject.CompareTag("Vendor_XP"))
                 {
-                    // Apply highlighting to the current hit object
                     HighlightObject(lastHitObject);
 
-                    // Check if the left mouse button is clicked
                     if (isMouseButtonDown)
                     {
-                        // Perform actions for Vendor_XP
-                        Debug.Log("Vendor_XP selected and left mouse button clicked!");
+                        IncreaseExperience();
                         isMouseButtonDown = false;
                     }
                 }
                 else if (lastHitObject.CompareTag("Vendor_Income"))
                 {
-                    // Apply highlighting to the current hit object
                     HighlightObject(lastHitObject);
 
-                    // Check if the left mouse button is clicked
                     if (isMouseButtonDown)
                     {
-                        // Perform actions for Vendor_Income
-                        Debug.Log("Vendor_Income selected and left mouse button clicked!");
+                        IncreaseIncome();
                         isMouseButtonDown = false;
                     }
                 }
-            }   
+            }
             else
             {
-                // Check if the left mouse button is clicked
                 if (isMouseButtonDown)
                 {
-                    // Perform actions for the last hit object
                     if (lastHitObject.CompareTag("Vendor_XP"))
                     {
-                        Debug.Log("Vendor_XP left mouse button clicked again!");
+                        IncreaseExperience();
                     }
                     else if (lastHitObject.CompareTag("Vendor_Income"))
                     {
-                        Debug.Log("Vendor_Income left mouse button clicked again!");
+                        IncreaseIncome();
                     }
                     isMouseButtonDown = false;
                 }
@@ -169,5 +167,26 @@ public class PlayerMovement : MonoBehaviour
                 childRenderers[i].material = originalMaterials[i];
             }
         }
+    }
+
+    private void IncreaseExperience()
+    {
+        var rnd = Random.Range(250, 750);
+        playerData.experience += rnd;
+        if (playerData.experience >= 1000)
+        {
+            playerData.level++;
+            playerData.experience -= 1000;
+        }
+    }
+
+    private void IncreaseIncome()
+    {
+        playerData.income += Random.Range(25, 500);
+    }
+
+    public void SetEnabled(bool isEnabled)
+    {
+        isMovementEnabled = isEnabled;
     }
 }

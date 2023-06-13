@@ -7,6 +7,7 @@ public class CameraFollow : MonoBehaviour
     public float height = 3.0f;              // Height above the target
     public float smoothSpeed = 10.0f;        // Smoothing speed for camera movement
     public float rotationSpeed = 5.0f;       // Rotation speed for camera
+    public bool isRotationEnabled = false;
 
     private Vector3 offset;                  // Offset from the target
 
@@ -18,6 +19,10 @@ public class CameraFollow : MonoBehaviour
 
     private void LateUpdate()
     {
+        // Exit the method if rotation is disabled
+        if (!isRotationEnabled)
+            return;
+
         // Calculate the desired position
         Vector3 targetPosition = target.position - target.forward * distance;
         targetPosition.y = target.position.y + height;
@@ -28,5 +33,10 @@ public class CameraFollow : MonoBehaviour
         // Rotate the camera to match the player's rotation
         Quaternion targetRotation = Quaternion.LookRotation(target.position - transform.position, Vector3.up);
         transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+    }
+
+    public void SetEnabled(bool isEnabled)
+    {
+        isRotationEnabled = enabled;
     }
 }
