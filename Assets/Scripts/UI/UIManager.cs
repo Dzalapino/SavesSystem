@@ -99,7 +99,7 @@ public class UIManager : MonoBehaviour
         playerMovement.playerData = SavesManager.Load(playerMovement.playerData.name, useCloudStorage);
 
         // Don't assign the data from the mocked cloud storage as it would cause null reference exception
-        if (!cloudSavesToggle) 
+        if (!useCloudStorage) 
             AssignPlayerDataToLabels();
     }
 
