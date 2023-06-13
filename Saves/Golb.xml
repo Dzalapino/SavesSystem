@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-16"?>
+<PlayerData xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <name>Golb</name>
+  <level>4</level>
+  <experience>600</experience>
+  <income>1491</income>
+</PlayerData>

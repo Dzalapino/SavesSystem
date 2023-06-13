@@ -1,3 +1,6 @@
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Xml.Serialization;
 using UnityEngine;
 
 public interface IDataSerializer
@@ -19,15 +22,24 @@ public class JsonDataSerializer : IDataSerializer
     }
 }
 
-public class BinaryDataSerializer : IDataSerializer
+public class XmlDataSerializer : IDataSerializer
 {
     public string SerializeData(object data)
     {
-        throw new System.NotImplementedException();
+        using (StringWriter stringWriter = new StringWriter())
+        {
+            XmlSerializer serializer = new XmlSerializer(data.GetType());
+            serializer.Serialize(stringWriter, data);
+            return stringWriter.ToString();
+        }
     }
 
     public object DeserializeData(string serializedData)
     {
-        throw new System.NotImplementedException();
+        using (StringReader stringReader = new StringReader(serializedData))
+        {
+            XmlSerializer serializer = new XmlSerializer(typeof(PlayerData));
+            return serializer.Deserialize(stringReader);
+        }
     }
 }

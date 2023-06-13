@@ -52,7 +52,7 @@ public class UIManager : MonoBehaviour
 
     public void OnYesButtonClick()
     {
-        var playerData = new PlayerData(startPlayerNameInput.text, 1, 0, 0, new List<Quest>());
+        var playerData = new PlayerData(startPlayerNameInput.text, 1, 0, 0);
         playerMovement.playerData = playerData;
         SavesManager.Save(startPlayerNameInput.text, playerData, useCloudStorage);
         welcomePopupPanel.SetActive(false);

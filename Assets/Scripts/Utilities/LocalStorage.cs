@@ -3,6 +3,8 @@ using System.IO;
 public class LocalStorage
 {
     private readonly string savesDirectory;
+    // here provide the desired Serializer type
+    // Remember to change the file extension at the bottom of this file in the GetFullPath method
     private static readonly IDataSerializer dataSerializer = new JsonDataSerializer();
 
     public LocalStorage(string directory)

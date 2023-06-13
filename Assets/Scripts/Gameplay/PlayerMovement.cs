@@ -28,7 +28,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Start()
     {
-        playerData = new PlayerData("blank", 1, 0, 0, new List<Quest>());
+        playerData = new PlayerData("blank", 1, 0, 0);
     }
 
     private void Update()
